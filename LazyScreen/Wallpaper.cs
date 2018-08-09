@@ -53,8 +53,8 @@ namespace LazyScreen
             switch (style)
             {
                 case Style.Fill:
-                    regKey.SetValue(@"WallpaperStyle", 10.ToString());
-                    regKey.SetValue(@"TileWallpaper", 0.ToString());
+                    regKey.SetValue("WallpaperStyle", 10.ToString());
+                    regKey.SetValue("TileWallpaper", 0.ToString());
                     break;
 
                 case Style.Fit:
@@ -62,25 +62,24 @@ namespace LazyScreen
                     regKey.SetValue(@"TileWallpaper", 0.ToString());
                     break;
 
-                // Windows 8 or newer only!
                 case Style.Span:
-                    regKey.SetValue(@"WallpaperStyle", 22.ToString());
-                    regKey.SetValue(@"TileWallpaper", 0.ToString());
+                    regKey.SetValue("WallpaperStyle", 22.ToString());
+                    regKey.SetValue("TileWallpaper", 0.ToString());
                     break;
 
                 case Style.Stretch:
-                    regKey.SetValue(@"WallpaperStyle", 2.ToString());
-                    regKey.SetValue(@"TileWallpaper", 0.ToString());
+                    regKey.SetValue("WallpaperStyle", 2.ToString());
+                    regKey.SetValue("TileWallpaper", 0.ToString());
                     break;
 
                 case Style.Tile:
-                    regKey.SetValue(@"WallpaperStyle", 0.ToString());
-                    regKey.SetValue(@"TileWallpaper", 1.ToString());
+                    regKey.SetValue("WallpaperStyle", 0.ToString());
+                    regKey.SetValue("TileWallpaper", 1.ToString());
                     break;
 
                 case Style.Center:
-                    regKey.SetValue(@"WallpaperStyle", 0.ToString());
-                    regKey.SetValue(@"TileWallpaper", 0.ToString());
+                    regKey.SetValue("WallpaperStyle", 0.ToString());
+                    regKey.SetValue("TileWallpaper", 0.ToString());
                     break;
 
             }
