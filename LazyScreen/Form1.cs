@@ -18,6 +18,7 @@ namespace LazyScreen
     {
         private const string PATH = "image.bmp";
 
+        private bool isClosing = false;
         private HttpClient httpClient;
         private (string Image, Wallpaper.Style Style) OrginalSettings;
 
@@ -119,7 +120,9 @@ namespace LazyScreen
                     return;
 
                 await DownloadImage();
-                Wallpaper.Set(new FileInfo(PATH).FullName, (Wallpaper.Style)comboBox1.SelectedIndex);
+
+                if (!isClosing)
+                    Wallpaper.Set(new FileInfo(PATH).FullName, (Wallpaper.Style)comboBox1.SelectedIndex);
             }
             catch (Exception ex)
             {
@@ -130,7 +133,7 @@ namespace LazyScreen
                 timer.Start();
             }
         }
-
+        
         private void numericUpDown_ValueChanged(object sender, EventArgs e)
         {
             timer.Stop();
@@ -144,6 +147,9 @@ namespace LazyScreen
         {
             try
             {
+                isClosing = true;
+                timer.Stop();
+
                 Wallpaper.Set(OrginalSettings.Image, OrginalSettings.Style);
             }
             catch (Exception ex)
