@@ -41,6 +41,8 @@
             this.numericUpDownStunde = new System.Windows.Forms.NumericUpDown();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.imageSources = new System.Windows.Forms.CheckedListBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSekunde)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMinute)).BeginInit();
@@ -65,15 +67,16 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.numericUpDownSekunde);
             this.groupBox1.Controls.Add(this.numericUpDownMinute);
             this.groupBox1.Controls.Add(this.numericUpDownStunde);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 59);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(183, 88);
+            this.groupBox1.Size = new System.Drawing.Size(183, 82);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bild wechseln";
@@ -161,7 +164,7 @@
             "Stretch",
             "Tile",
             "Center"});
-            this.comboBox1.Location = new System.Drawing.Point(215, 58);
+            this.comboBox1.Location = new System.Drawing.Point(18, 32);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 1;
@@ -169,17 +172,39 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(212, 35);
+            this.label4.Location = new System.Drawing.Point(15, 9);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 2;
             this.label4.Text = "Bild Style";
             // 
+            // imageSources
+            // 
+            this.imageSources.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.imageSources.FormattingEnabled = true;
+            this.imageSources.Location = new System.Drawing.Point(201, 32);
+            this.imageSources.Name = "imageSources";
+            this.imageSources.Size = new System.Drawing.Size(162, 109);
+            this.imageSources.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(198, 9);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(63, 13);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Bild Quellen";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(375, 118);
+            this.ClientSize = new System.Drawing.Size(375, 152);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.imageSources);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.groupBox1);
@@ -213,6 +238,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckedListBox imageSources;
+        private System.Windows.Forms.Label label5;
     }
 }
 

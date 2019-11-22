@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using LazyScreen.ImageSources;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,6 +20,7 @@ namespace LazyScreen
         private bool isClosing = false;
         private HttpClient httpClient;
         private (string Image, Wallpaper.Style Style) OrginalSettings;
+        private Random rnd;
 
         public Form1()
         {
@@ -28,6 +28,15 @@ namespace LazyScreen
 
             comboBox1.SelectedIndex = 0;
             httpClient = new HttpClient();
+            rnd = new Random();
+
+            imageSources.Items.AddRange(
+                Assembly
+                .GetExecutingAssembly()
+                .GetTypes()
+                .Where(x => !x.IsInterface && x.GetInterfaces().Any(y => y == typeof(IImageSource)))
+                .Select(x => new FoundImageSource(x))
+                .ToArray());
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -36,7 +45,7 @@ namespace LazyScreen
             {
                 OrginalSettings = Wallpaper.Get();
                 var fileInfo = new FileInfo(PATH);
-                if (OrginalSettings.Image == fileInfo.FullName)
+                if (fileInfo.Exists && OrginalSettings.Image == fileInfo.FullName)
                 {
                     string newPath = "";
                     int count = 0;
@@ -90,14 +99,17 @@ namespace LazyScreen
             this.notifyIcon.ShowBalloonTip(150);
         }
 
-        public async Task DownloadImage()
+        public async Task DownloadImage(IEnumerable<IImageSource> imageSources)
         {
             try
             {
-                var response = await httpClient.GetStringAsync("https://dog.ceo/api/breeds/image/random");
-                var result = JsonConvert.DeserializeObject<Result>(response);
+                var source = imageSources.ElementAtOrDefault(rnd.Next(0, imageSources.Count()));
 
-                using (var stream = await httpClient.GetStreamAsync(result.message))
+                if (source is null)
+                    return;
+
+                var img = await source.GetImageUrl(httpClient);
+                using (var stream = await httpClient.GetStreamAsync(img))
                 using (var bmp = new Bitmap(stream))
                     bmp.Save("tmp_file", ImageFormat.Bmp);
 
@@ -119,7 +131,7 @@ namespace LazyScreen
                 if (comboBox1.SelectedIndex == -1)
                     return;
 
-                await DownloadImage();
+                await DownloadImage(imageSources.SelectedItems.Cast<FoundImageSource>().Select(x => x.Instance).Cast<IImageSource>());
 
                 if (!isClosing)
                     Wallpaper.Set(new FileInfo(PATH).FullName, (Wallpaper.Style)comboBox1.SelectedIndex);
@@ -133,7 +145,7 @@ namespace LazyScreen
                 timer.Start();
             }
         }
-        
+
         private void numericUpDown_ValueChanged(object sender, EventArgs e)
         {
             timer.Stop();
@@ -147,6 +159,8 @@ namespace LazyScreen
         {
             try
             {
+                httpClient?.Dispose();
+
                 isClosing = true;
                 timer.Stop();
 
