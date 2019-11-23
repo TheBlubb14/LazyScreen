@@ -1,4 +1,4 @@
-﻿using System;
+﻿using LazyScreen.Sources;
 
 namespace LazyScreen
 {
@@ -6,12 +6,12 @@ namespace LazyScreen
     {
         public string Name { get; set; }
 
-        public object Instance { get; set; }
+        public ISource Instance { get; set; }
 
-        public FoundImageSource(Type type)
+        public FoundImageSource(string name, ISource instance)
         {
-            Name = type.Name;
-            Instance = Activator.CreateInstance(type);
+            Name = name;
+            Instance = instance;
         }
 
         public override string ToString() => Name;

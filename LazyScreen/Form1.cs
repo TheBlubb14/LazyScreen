@@ -1,4 +1,4 @@
-﻿using LazyScreen.ImageSources;
+﻿using LazyScreen.Sources;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,6 +20,7 @@ namespace LazyScreen
         private HttpClient httpClient;
         private (string Image, Wallpaper.Style Style) OrginalSettings;
         private Random rnd;
+        private readonly Source sources;
 
         public Form1()
         {
@@ -30,13 +30,11 @@ namespace LazyScreen
             httpClient = new HttpClient();
             rnd = new Random();
 
+            sources = new Source(httpClient, "apollo 11");
+
             imageSources.Items.AddRange(
-                Assembly
-                .GetExecutingAssembly()
-                .GetTypes()
-                .Where(x => !x.IsInterface && x.GetInterfaces().Any(y => y == typeof(IImageSource)))
-                .Select(x => new FoundImageSource(x))
-                .ToArray());
+                sources.Sources.Select(x =>
+                new FoundImageSource(x.Name, x.Instance)).ToArray());
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -99,7 +97,7 @@ namespace LazyScreen
             this.notifyIcon.ShowBalloonTip(150);
         }
 
-        public async Task DownloadImage(IEnumerable<IImageSource> imageSources)
+        public async Task DownloadImage(IEnumerable<ISource> imageSources)
         {
             try
             {
@@ -108,7 +106,7 @@ namespace LazyScreen
                 if (source is null)
                     return;
 
-                var img = await source.GetImageUrl(httpClient);
+                var img = await source.GetImage();
                 using (var stream = await httpClient.GetStreamAsync(img))
                 using (var bmp = new Bitmap(stream))
                     bmp.Save("tmp_file", ImageFormat.Bmp);
@@ -131,7 +129,7 @@ namespace LazyScreen
                 if (comboBox1.SelectedIndex == -1)
                     return;
 
-                await DownloadImage(imageSources.SelectedItems.Cast<FoundImageSource>().Select(x => x.Instance).Cast<IImageSource>());
+                await DownloadImage(imageSources.SelectedItems.Cast<FoundImageSource>().Select(x => x.Instance).Cast<ISource>());
 
                 if (!isClosing)
                     Wallpaper.Set(new FileInfo(PATH).FullName, (Wallpaper.Style)comboBox1.SelectedIndex);
